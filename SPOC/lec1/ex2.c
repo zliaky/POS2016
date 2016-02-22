@@ -58,6 +58,6 @@ main()
 {
   ivec(alltraps);
   asm(STI);
-  while(1){};
+  while(1){}
   asm(HALT);
 }

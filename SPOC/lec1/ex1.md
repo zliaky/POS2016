@@ -7,18 +7,6 @@
 timer是时钟，delta为timer每次增加的量。其中delta为4096，阈值timeout可由TIME指令设置。当timeout不为0且timer大于阈值timeout时，若中断可使能（即iena为1），触发时钟中断，设置中断类型为FTIMER，timer清零，执行中断处理例程。
 
 ### v9-cpu指令，关键变量描述有误或不全的情况；
-a: a寄存器
-b: b寄存器
-c: c寄存器
-f: f浮点寄存器
-g: g浮点寄存器
-ir:　指令寄存器
-xpc: pc在host内存中的值
-fpc: pc在host内存中所在页的下一页的起始地址值
-tpc: pc在host内存中所在页的起始地址值
-xsp: sp在host内存中的值
-tsp: sp在host内存中所在页的起始地址值
-fsp: 辅助判断是否要经过tr/tw的分析
 - ssp: 系统栈指针
 - usp: 用户栈指针
 - cycle: 
