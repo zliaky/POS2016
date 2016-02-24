@@ -55,7 +55,7 @@ root/usr/funcall.c  12:   int i;
 root/usr/funcall.c  13:   ret = 1;
 00000010  fffff801  ENT   0xfffffff8 (D -8) #sp-=8
 00000014  00000123  LI    0x1 (D 1)         #a=1
-00000018  00000045  SG    0x0 (D 0)         #*pc=a
+00000018  00000045  SG    0x0 (D 0)         #*global_address=a
 root/usr/funcall.c  14:   i=n;
 0000001c  0000200e  LL    0x20 (D 32)       #a=*(sp+32)
 00000020  00000440  SL    0x4 (D 4)         #*(sp+4)=a
@@ -76,7 +76,7 @@ root/usr/funcall.c  17:   return i;
 00000050  00000157  SUBI  0x1 (D 1)         #a-=1
 00000054  00000440  SL    0x4 (D 4)         #*(sp+4)=a
 00000058  00000154  ADDI  0x1 (D 1)         #a+=1
-0000005c  00000086  BNZ   <fwd>             #branch to ? if a/f is not zero
+0000005c  00000086  BNZ   <fwd>             #branch to ? if a is not zero
 00000060  0000040e  LL    0x4 (D 4)         #a=*(sp+4)
 00000064  00000802  LEV   0x8 (D 8)         #pc=*sp, sp+=16
 root/usr/funcall.c  18: }  
