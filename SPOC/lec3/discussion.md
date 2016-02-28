@@ -127,3 +127,18 @@ DESCRIPTION
 （以上为在terminal输入man strace的结果，例子太长只截取片段）
 
 ####了解如何OS是如何实现中断，异常，或系统调用的。会使用v9-cpu的dis,xc, xem命令（包括启动参数），分析v9-cpu中的os0.c, os2.c，了解与异常，中断，系统调用相关的os设计实现。阅读v9-cpu中的cpu.md文档，了解汇编指令的类型和含义等，了解v9-cpu的细节。
+- dis : disasm Exec_File -o Assemble_File [-c]
+    - -c : print comments for each instrs 
+    - 将可执行文件反汇编成汇编代码，启动参数-c为打印各指令的注释
+- xc : ./xc [-v] [-s] [-Ipath] [-o exefile] file ...
+    - -v : 
+    - -s : 
+    - -Ipath : 
+    - -o : 
+    - 将.c文件编译成可供xem使用的可执行文件
+- xem : ./xem : usage: ./xem [-g] [-v] [-m memsize] [-f filesys] file
+    - -g : debuger mode
+    - -v : 输出memsize？（貌似是输出调试信息的样子）
+    - -m : 设置memsize
+    - -f : 
+    - 模拟在v9-cpu上执行xc编译出来的文件
