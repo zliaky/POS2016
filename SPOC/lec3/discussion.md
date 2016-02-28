@@ -136,7 +136,7 @@ DESCRIPTION
     - -Ipath : 
     - -o : 
     - 将.c文件编译成可供xem使用的可执行文件
-- xem : ./xem : usage: ./xem [-g] [-v] [-m memsize] [-f filesys] file
+- xem : ./xem [-g] [-v] [-m memsize] [-f filesys] file
     - -g : debuger mode
     - -v : 输出memsize？（貌似是输出调试信息的样子）
     - -m : 设置memsize
