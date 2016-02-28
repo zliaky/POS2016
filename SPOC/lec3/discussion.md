@@ -101,26 +101,7 @@ System call usage summary for 32 bit mode:
   1.92    0.000003           3         1           set_thread_area
 ------ ----------- ----------- --------- --------- ----------------
 100.00    0.000156                    23         3 total
-```STRACE(1)                   General Commands Manual                  STRACE(1)
-
-NAME
-       strace - trace system calls and signals
-
-SYNOPSIS
-       strace  [-CdffhiqrtttTvVxxy]  [-In]  [-bexecve] [-eexpr]...  [-acolumn]
-       [-ofile]  [-sstrsize]  [-Ppath]...  -ppid...  /  [-D]  [-Evar[=val]]...
-       [-uusername] command [args]
-
-       strace  -c[df]  [-In]  [-bexecve]  [-eexpr]...  [-Ooverhead] [-Ssortby]
-       -ppid... / [-D] [-Evar[=val]]... [-uusername] command [args]
-
-DESCRIPTION
-       In the simplest case strace runs the specified command until it  exits.
-       It  intercepts  and  records  the  system  calls  which are called by a
-       process and the signals which are received by a process.  The  name  of
-       each  system  call,  its  arguments and its return value are printed on
-       standard error or to the file specified with the -o option.
-
+```
 - man:man命令用来查阅一些命令的帮助信息。使用例子如下：
 ```
 STRACE(1)                   General Commands Manual                  STRACE(1)
