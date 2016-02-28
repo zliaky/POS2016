@@ -23,4 +23,4 @@
 ###了解在PC机上有啥中断和异常。搜索“80386　开机　启动”
 - 当80386系统开机启动或上电复位时，便自动进入实地址模式，用户可以一直运行在实模式，也可以通过软件指令切换到保护模式。
 - 实地址模式为处理过程调用和启用中断或异常处理程序提供了16位宽的堆栈和一个中断向量表。
-    - 见http://netcourse.cug.edu.cn/NCourse/weixingjisuanji/content/chapter9/9_2/9_2_1.htm
+    - 见[foo]: http://netcourse.cug.edu.cn/NCourse/weixingjisuanji/content/chapter9/9_2/9_2_1.htm
