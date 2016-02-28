@@ -52,3 +52,97 @@ Disassembly of section .init:
  80482b6:	c3                   	ret    
 ```
 (例子太长只截取片段）
+
+- nm:nm用来列出目标文件的符号清单。使用例子如下：
+```
+zliaky@zliaky-Lenovo-G400s:~/lab/ucore_os_lab/related_info/lab1$ nm lab1-ex0
+00000002 a AF_INET
+0804a040 B __bss_start
+0804a040 b completed.6591
+0804a014 D __data_start
+0804a014 W data_start
+08048330 t deregister_tm_clones
+080483a0 t __do_global_dtors_aux
+08049f0c t __do_global_dtors_aux_fini_array_entry
+0804a018 D __dso_handle
+08049f14 d _DYNAMIC
+0804a040 D _edata
+0804a044 B _end
+```
+（例子太长只截取片段）
+- file:file命令用来探测给定文件的类型。使用例子如下：
+```
+zliaky@zliaky-Lenovo-G400s:~/lab/ucore_os_lab/related_info/lab1$ file lab1-ex0
+lab1-ex0: ELF 32-bit LSB  executable, Intel 80386, version 1 (SYSV), dynamically linked (uses shared libs), for GNU/Linux 2.6.24, BuildID[sha1]=b4c37c2610ce92f31c49af7d65997e7cdb50d49f, not stripped
+```
+- strace:strace常用来跟踪进程执行时的系统调用和所接收的信号。使用例子如下：
+```
+zliaky@zliaky-Lenovo-G400s:~/lab/ucore_os_lab/related_info/lab1$ strace -c ./lab1-ex0
+[ Process PID=12884 runs in 32 bit mode. ]
+hello world
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000010          10         1           execve
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000010                     1           total
+System call usage summary for 32 bit mode:
+% time     seconds  usecs/call     calls    errors syscall
+------ ----------- ----------- --------- --------- ----------------
+ 25.00    0.000039           7         6           mmap2
+ 14.10    0.000022           7         3         3 access
+ 13.46    0.000021          21         1           munmap
+ 12.18    0.000019           6         3           mprotect
+ 11.54    0.000018           9         2           open
+  8.97    0.000014          14         1           write
+  3.85    0.000006           6         1           brk
+  3.21    0.000005           3         2           close
+  3.21    0.000005           3         2           fstat64
+  2.56    0.000004           4         1           read
+  1.92    0.000003           3         1           set_thread_area
+------ ----------- ----------- --------- --------- ----------------
+100.00    0.000156                    23         3 total
+```STRACE(1)                   General Commands Manual                  STRACE(1)
+
+NAME
+       strace - trace system calls and signals
+
+SYNOPSIS
+       strace  [-CdffhiqrtttTvVxxy]  [-In]  [-bexecve] [-eexpr]...  [-acolumn]
+       [-ofile]  [-sstrsize]  [-Ppath]...  -ppid...  /  [-D]  [-Evar[=val]]...
+       [-uusername] command [args]
+
+       strace  -c[df]  [-In]  [-bexecve]  [-eexpr]...  [-Ooverhead] [-Ssortby]
+       -ppid... / [-D] [-Evar[=val]]... [-uusername] command [args]
+
+DESCRIPTION
+       In the simplest case strace runs the specified command until it  exits.
+       It  intercepts  and  records  the  system  calls  which are called by a
+       process and the signals which are received by a process.  The  name  of
+       each  system  call,  its  arguments and its return value are printed on
+       standard error or to the file specified with the -o option.
+
+- man:man命令用来查阅一些命令的帮助信息。使用例子如下：
+```
+STRACE(1)                   General Commands Manual                  STRACE(1)
+
+NAME
+       strace - trace system calls and signals
+
+SYNOPSIS
+       strace  [-CdffhiqrtttTvVxxy]  [-In]  [-bexecve] [-eexpr]...  [-acolumn]
+       [-ofile]  [-sstrsize]  [-Ppath]...  -ppid...  /  [-D]  [-Evar[=val]]...
+       [-uusername] command [args]
+
+       strace  -c[df]  [-In]  [-bexecve]  [-eexpr]...  [-Ooverhead] [-Ssortby]
+       -ppid... / [-D] [-Evar[=val]]... [-uusername] command [args]
+
+DESCRIPTION
+       In the simplest case strace runs the specified command until it  exits.
+       It  intercepts  and  records  the  system  calls  which are called by a
+       process and the signals which are received by a process.  The  name  of
+       each  system  call,  its  arguments and its return value are printed on
+       standard error or to the file specified with the -o option.
+```
+（以上为在terminal输入man strace的结果，例子太长只截取片段）
+
+####了解如何OS是如何实现中断，异常，或系统调用的。会使用v9-cpu的dis,xc, xem命令（包括启动参数），分析v9-cpu中的os0.c, os2.c，了解与异常，中断，系统调用相关的os设计实现。阅读v9-cpu中的cpu.md文档，了解汇编指令的类型和含义等，了解v9-cpu的细节。
