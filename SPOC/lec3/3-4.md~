@@ -46,3 +46,7 @@ write(1, "hello world\n", 12hello world
 exit_group(12)                          = ?
 +++ exited with 12 +++
 ```
+- 解释：
+    - 系统首先调用execve来执行可执行文件，然后调用brk来改变数据段空间的分配，然后通过access确定文件的可存储性（return -1表示不可存储），然后调用mmap来映射虚拟内存页。
+    - 通过调用open来调用动态库（libc.so.6等），调用fstat查看打开的库的信息，映射虚拟内存页并设置内存映像保护，最后关闭动态库
+    - 
