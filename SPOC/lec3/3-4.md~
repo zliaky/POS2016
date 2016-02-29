@@ -1,0 +1,48 @@
+###课堂练习题
+
+- - -
+
+####3.4 linux系统调用分析
+1.通过分析lab1_ex0了解Linux应用的系统调用编写和含义。
+- objdump : objdump命令是Linux下的反汇编目标文件或者可执行文件的命令。
+- nm : nm用来列出目标文件的符号清单。
+- file : file命令用来探测给定文件的类型。
+- 系统调用的具体含义：指运行在使用者空间的程序向操作系统内核请求需要更高权限运行的服务。系统调用提供用户程序与操作系统之间的接口。
+
+2.通过调试lab1_ex1了解Linux应用的系统调用执行过程。
+- strace : strace常用来跟踪进程执行时的系统调用和所接收的信号。
+- 系统调用的具体过程：
+以下列举linux系统执行lab1_ex1时的系统调用
+```
+execve("./lab1-ex1", ["./lab1-ex1"], [/* 73 vars */]) = 0
+brk(0)                                  = 0xa4d000
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f11c4cca000
+access("/etc/ld.so.preload", R_OK)      = -1 ENOENT (No such file or directory)
+open("/etc/ld.so.cache", O_RDONLY|O_CLOEXEC) = 3
+fstat(3, {st_mode=S_IFREG|0644, st_size=146859, ...}) = 0
+mmap(NULL, 146859, PROT_READ, MAP_PRIVATE, 3, 0) = 0x7f11c4ca6000
+close(3)                                = 0
+access("/etc/ld.so.nohwcap", F_OK)      = -1 ENOENT (No such file or directory)
+open("/lib/x86_64-linux-gnu/libc.so.6", O_RDONLY|O_CLOEXEC) = 3
+read(3, "\177ELF\2\1\1\0\0\0\0\0\0\0\0\0\3\0>\0\1\0\0\0\320\37\2\0\0\0\0\0"..., 832) = 832
+fstat(3, {st_mode=S_IFREG|0755, st_size=1840928, ...}) = 0
+mmap(NULL, 3949248, PROT_READ|PROT_EXEC, MAP_PRIVATE|MAP_DENYWRITE, 3, 0) = 0x7f11c46e5000
+mprotect(0x7f11c48a0000, 2093056, PROT_NONE) = 0
+mmap(0x7f11c4a9f000, 24576, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_DENYWRITE, 3, 0x1ba000) = 0x7f11c4a9f000
+mmap(0x7f11c4aa5000, 17088, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_FIXED|MAP_ANONYMOUS, -1, 0) = 0x7f11c4aa5000
+close(3)                                = 0
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f11c4ca5000
+mmap(NULL, 8192, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f11c4ca3000
+arch_prctl(ARCH_SET_FS, 0x7f11c4ca3740) = 0
+mprotect(0x7f11c4a9f000, 16384, PROT_READ) = 0
+mprotect(0x600000, 4096, PROT_READ)     = 0
+mprotect(0x7f11c4ccc000, 4096, PROT_READ) = 0
+munmap(0x7f11c4ca6000, 146859)          = 0
+fstat(1, {st_mode=S_IFCHR|0620, st_rdev=makedev(136, 2), ...}) = 0
+mmap(NULL, 4096, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = 0x7f11c4cc9000
+write(1, "hello world\n", 12hello world
+)           = 12
+exit_group(12)                          = ?
++++ exited with 12 +++
+```
