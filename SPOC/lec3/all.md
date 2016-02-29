@@ -96,6 +96,7 @@ syscall(void) {
     ...
 }
 ```
+```
     asm volatile (
         "int %1;"
         : "=a" (ret)
@@ -135,7 +136,6 @@ syscall(int num, ...) {
         a[i] = va_arg(ap, uint32_t);
     }
     va_end(ap);
-
     asm volatile (
         "int %1;"
         : "=a" (ret)
@@ -177,9 +177,7 @@ syscall(void) {
     int num = tf->tf_regs.reg_eax;
     if (num >= 0 && num < NUM_SYSCALLS) {
         if (syscalls[num] != NULL) {
-
             // 在这里根据系统调用的种类（num）进行输出
-
             arg[0] = tf->tf_regs.reg_edx;
             arg[1] = tf->tf_regs.reg_ecx;
             arg[2] = tf->tf_regs.reg_ebx;
