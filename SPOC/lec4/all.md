@@ -12,7 +12,7 @@
 	- 转跳后程序的CPL(CS.RPL)=转跳后程序的CodeDescriptor.DPL
 - 以call为例
 	- 如果能成功转跳到一致代码段, 转跳后程序的CPL(CS.RPL)=转跳前程序的CPL(CS.RPL)，(转跳后程序的CPL继承了转跳前程序的CPL)
-	- 如果能成功转跳到非一致代码段, 转跳后程序的CPL(CS．RPL)＝转跳后程序的Descriptor.DPL。
+	- 如果能成功转跳到非一致代码段, 转跳后程序的CPL(CS．RPL)＝转跳后程序的Descriptor.DPL
 
 ####比较不同特权级的中断切换时的堆栈变化差别；(challenge)写出一些简单的小程序（c or asm）来显示出不同特权级的的中断切换的堆栈变化情况。
 
