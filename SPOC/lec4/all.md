@@ -6,10 +6,10 @@
 - RPL：RPL说明的是进程对段访问的请求权限(Request Privilege Level)，是对于段选择子而言的，每个段选择子有自己的RPL，它说明的是进程对段访问的请求权限，有点像函数参数。而且RPL对每个段来说不是固定的，两次访问同一段时的RPL可以不同。RPL可能会削弱CPL的作用，例如当前CPL=0的进程要访问一个数据段，它把段选择符中的RPL设为3，这样虽然它对该段仍然只有特权为3的访问权限。
 - 对数据段和堆栈段访问时的特权级控制：要求max (CPL, RPL) <= DPL
 - 对代码段访问的特权级控制：
-    - 所有的程序转跳，CPU都不会把段选择子的RPL赋给转跳后程序的CS.RPL。
+    - 所有的程序转跳，CPU都不会把段选择子的RPL赋给转跳后程序的CS.RPL
 　　　　- 转跳后程序的CPL(CS.RPL)只会有下面的俩种可能：
-　     - 转跳后程序的CPL(CS.RPL) = 转跳前程序的CPL(CS.RPL) 
-　　　  　- 转跳后程序的CPL(CS.RPL) =　转跳后程序的CodeDescriptor.DPL
+　   - 转跳后程序的CPL(CS.RPL) = 转跳前程序的CPL(CS.RPL) 
+　  　- 转跳后程序的CPL(CS.RPL) =　转跳后程序的CodeDescriptor.DPL
 - 以call为例
     - 如果能成功转跳到一致代码段, 转跳后程序的CPL(CS.RPL) = 转跳前程序的CPL(CS.RPL)，(转跳后程序的CPL继承了转跳前程序的CPL)
 　　　　- 如果能成功转跳到非一致代码段, 转跳后程序的CPL(CS．RPL)　＝转跳后程序的Descriptor.DPL。
