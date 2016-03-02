@@ -1,9 +1,30 @@
 #课堂题
 
 ####描述符特权级DPL、当前特权级CPL和请求特权级RPL的含义是什么？在哪些寄存器中这些字段？对应的访问条件是什么？ (challenge)写出一些简单的小程序（c or asm）来体现这些特权级的区别和联系。
-- DPL：
+- DPL：DPL存储在段描述符中，规定访问该段的权限级别(Descriptor Privilege Level)，每个段的DPL固定。
 - CPL：CPL是当前进程的权限级别(Current Privilege Level)，是当前正在执行的代码所在的段的特权级，存在于cs寄存器的低两位。
 - RPL：RPL说明的是进程对段访问的请求权限(Request Privilege Level)，是对于段选择子而言的，每个段选择子有自己的RPL，它说明的是进程对段访问的请求权限，有点像函数参数。而且RPL对每个段来说不是固定的，两次访问同一段时的RPL可以不同。RPL可能会削弱CPL的作用，例如当前CPL=0的进程要访问一个数据段，它把段选择符中的RPL设为3，这样虽然它对该段仍然只有特权为3的访问权限。
+- 对数据段和堆栈段访问时的特权级控制：要求max (CPL, RPL) <= DPL
+- 对代码段访问的特权级控制：
+    - 所有的程序转跳，CPU都不会把段选择子的RPL赋给转跳后程序的CS.RPL。
+　　　　- 转跳后程序的CPL(CS.RPL)只会有下面的俩种可能：
+　    　　　- 转跳后程序的CPL(CS.RPL) = 转跳前程序的CPL(CS.RPL) 
+　　　    　- 或
+　　　    　- 转跳后程序的CPL(CS.RPL) =　转跳后程序的CodeDescriptor.DPL
+- 以call为例
+    - 如果能成功转跳到一致代码段, 转跳后程序的CPL(CS.RPL) = 转跳前程序的CPL(CS.RPL)，(转跳后程序的CPL继承了转跳前程序的CPL)
+　　　　- 如果能成功转跳到非一致代码段, 转跳后程序的CPL(CS．RPL)　＝转跳后程序的Descriptor.DPL。
+- 普通转跳（没有经过Gate 这东西）：即JMP或Call后跟着48位全指针（16位段选择子+32位地址偏移），且其中的段选择子指向代码段描述符，这样的跳转称为直接（普通）跳转。普通跳转不能使特权级发生跃迁，即不会引起CPL的变化，看下面的详细描述：
+
+
+　　　　　　　　　目标是一致代码段：
+　　　　　　　　　　　　　 要求：CPL(CS.RPL)>=DestinationDescriptorCode.DPL ，其他RPL是不检查的。
+　　　　　　　　　　　　　 转跳后程序的CPL(NewCS.RPL) = 转跳前程序的CPL( OldCS.RPL)
+　　　　　　　　　　　　　 上面的安排就是概念１，２的意思,此时，CPL没有发生变化，纵使它执行了特权级（DPL）较高的代码。若访问时不满足要求，则发生异常。
+　　　　　　　　　目标是非一致代码段：
+　　　　　　　　　　　　　 要求：CPL(CS.RPL)＝DestinationDescriptorCode.DPL　AND　RPL≤CPL(CS.RPL)
+　　　　　　　　　　　　　 转跳后程序的CPL(NewCS.RPL) = DestinationDescriptorCode.DPL
+　　　　　　　　　　　　　 上面的安排就是概念３的意思和部分１的意思----主人(一致代码段)只帮相同特权级的帮客人做事。因为前提是CPL=DPL，所以转跳后程序的CPL(NewCS.RPL) = DestinationDescriptorCode.DPL不会改变CPL的值，特权级(CPL)也没有发生变化。如果访问时不满足前提CPL=DPL，则引发异常。
 
 ####比较不同特权级的中断切换时的堆栈变化差别；(challenge)写出一些简单的小程序（c or asm）来显示出不同特权级的的中断切换的堆栈变化情况。
 
