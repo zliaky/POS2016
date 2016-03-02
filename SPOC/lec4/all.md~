@@ -8,25 +8,21 @@
 - 对代码段访问的特权级控制：
     - 所有的程序转跳，CPU都不会把段选择子的RPL赋给转跳后程序的CS.RPL。
 　　　　- 转跳后程序的CPL(CS.RPL)只会有下面的俩种可能：
-　    　　　- 转跳后程序的CPL(CS.RPL) = 转跳前程序的CPL(CS.RPL) 
-　　　    　- 或
-　　　    　- 转跳后程序的CPL(CS.RPL) =　转跳后程序的CodeDescriptor.DPL
+　     - 转跳后程序的CPL(CS.RPL) = 转跳前程序的CPL(CS.RPL) 
+　　　  　- 或
+　　　  　- 转跳后程序的CPL(CS.RPL) =　转跳后程序的CodeDescriptor.DPL
 - 以call为例
     - 如果能成功转跳到一致代码段, 转跳后程序的CPL(CS.RPL) = 转跳前程序的CPL(CS.RPL)，(转跳后程序的CPL继承了转跳前程序的CPL)
 　　　　- 如果能成功转跳到非一致代码段, 转跳后程序的CPL(CS．RPL)　＝转跳后程序的Descriptor.DPL。
-- 普通转跳（没有经过Gate 这东西）：即JMP或Call后跟着48位全指针（16位段选择子+32位地址偏移），且其中的段选择子指向代码段描述符，这样的跳转称为直接（普通）跳转。普通跳转不能使特权级发生跃迁，即不会引起CPL的变化，看下面的详细描述：
-
-
-　　　　　　　　　目标是一致代码段：
-　　　　　　　　　　　　　 要求：CPL(CS.RPL)>=DestinationDescriptorCode.DPL ，其他RPL是不检查的。
-　　　　　　　　　　　　　 转跳后程序的CPL(NewCS.RPL) = 转跳前程序的CPL( OldCS.RPL)
-　　　　　　　　　　　　　 上面的安排就是概念１，２的意思,此时，CPL没有发生变化，纵使它执行了特权级（DPL）较高的代码。若访问时不满足要求，则发生异常。
-　　　　　　　　　目标是非一致代码段：
-　　　　　　　　　　　　　 要求：CPL(CS.RPL)＝DestinationDescriptorCode.DPL　AND　RPL≤CPL(CS.RPL)
-　　　　　　　　　　　　　 转跳后程序的CPL(NewCS.RPL) = DestinationDescriptorCode.DPL
-　　　　　　　　　　　　　 上面的安排就是概念３的意思和部分１的意思----主人(一致代码段)只帮相同特权级的帮客人做事。因为前提是CPL=DPL，所以转跳后程序的CPL(NewCS.RPL) = DestinationDescriptorCode.DPL不会改变CPL的值，特权级(CPL)也没有发生变化。如果访问时不满足前提CPL=DPL，则引发异常。
 
 ####比较不同特权级的中断切换时的堆栈变化差别；(challenge)写出一些简单的小程序（c or asm）来显示出不同特权级的的中断切换的堆栈变化情况。
+
+- 中断的保存过程差别
+	- 内核态产生的中断依然处在内核态，使用同一个堆栈，在这个堆栈上压入被打断的那一刻寄存器的内容，包括Error Code（严重异常）、EIP、CS（当前被打断的地址或下一条地址）和EFLAGS（标志寄存器）。
+	- 用户态产生的中断将产生特权级变化，使用不同的堆栈，除了压入上述内容以外，还需要压入ESP和SS（用户态栈的地址）。
+- 中断的恢复过程差别
+	- 内核态产生的中断依然恢复到内核态，使用同一个堆栈，执行iret指令返回时，将Error Code弹出，根据CS和EIP跳转到被打断的地方继续执行，恢复EFLAGS。
+	- 用户态产生的中断将从内核态恢复到用户态，切换回用户态的堆栈，执行iret指令返回时，除了弹出上述内容以外，还要弹出SS和ESP。
 
 ###v9-cpu的执行过程(challenge)
 - 参考os*.c，写一个小程序，能够显示在用户态无法执行的所有特权指令，能够显示出不同特权级的的中断切换的堆栈变化情况。

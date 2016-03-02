@@ -8,9 +8,8 @@
 - 对代码段访问的特权级控制：
     - 所有的程序转跳，CPU都不会把段选择子的RPL赋给转跳后程序的CS.RPL。
 　　　　- 转跳后程序的CPL(CS.RPL)只会有下面的俩种可能：
-　    　　　- 转跳后程序的CPL(CS.RPL) = 转跳前程序的CPL(CS.RPL) 
-　　　    　- 或
-　　　    　- 转跳后程序的CPL(CS.RPL) =　转跳后程序的CodeDescriptor.DPL
+　     - 转跳后程序的CPL(CS.RPL) = 转跳前程序的CPL(CS.RPL) 
+　　　  　- 转跳后程序的CPL(CS.RPL) =　转跳后程序的CodeDescriptor.DPL
 - 以call为例
     - 如果能成功转跳到一致代码段, 转跳后程序的CPL(CS.RPL) = 转跳前程序的CPL(CS.RPL)，(转跳后程序的CPL继承了转跳前程序的CPL)
 　　　　- 如果能成功转跳到非一致代码段, 转跳后程序的CPL(CS．RPL)　＝转跳后程序的Descriptor.DPL。
