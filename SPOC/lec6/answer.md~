@@ -6,5 +6,5 @@ Virtual Address 317a:
 Virtual Address 4546:
   --> pde index:0x09  pde contents:(valid 1, pfn 0x39)
     --> pte index:0x0a  pte contents:(valid 0, pfn 0x7f)
-      --> 
+      --> Fault (page table entry not valid)
 
