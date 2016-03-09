@@ -1,5 +1,5 @@
 Virtual Address 317a:
-  --> pde index:0x0c  pde contents:(valid 1, pfn 0x18)
+	--> pde index:0x0c  pde contents:(valid 1, pfn 0x18)
     --> pte index:0x0b  pte contents:(valid 1, pfn 0x35)
       --> Translates to Physical Address 0x6ba --> Value: 1e
 
