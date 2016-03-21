@@ -12,6 +12,7 @@ int main() {
 	char page;
 	int ptr = 0;
 	int t;
+
 	cout << "Window size = ";
 	cin >> t;
 	for (int i = 0; i < t; ++i) {
@@ -50,6 +51,7 @@ int main() {
 			}
 		}
 
+		// print the state of resident set
 		access_page[ptr] = page;
 		ptr = (ptr + 1) % t;
 		cout << "Resident set =";
