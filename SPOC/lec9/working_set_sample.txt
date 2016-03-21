@@ -1,0 +1,45 @@
+Window size = 4
+
+Access page: c
+Page Fault!
+Swap in page c
+Resident set = c
+
+Access page: c
+Resident set = c
+
+Access page: d
+Page Fault!
+Swap in page d
+Resident set = c d
+
+Access page: b
+Page Fault!
+Swap in page b
+Resident set = b c d
+
+Access page: c
+Resident set = b c d
+
+Access page: e
+Page Fault!
+Swap in page e
+Resident set = b c d e
+
+Access page: c
+Swap out page c
+Resident set = b c e
+
+Access page: e
+Swap out page e
+Resident set = c e
+
+Access page: a
+Page Fault!
+Swap in page a
+Resident set = a c e
+
+Access page: d
+Page Fault!
+Swap in page d
+Resident set = a c d e
