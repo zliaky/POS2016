@@ -1,0 +1,58 @@
+Window size:2
+===============
+step 0         Page no:1
+page fault!   current time:0     last time:-1
+working set: 1 
+===============
+step 1         Page no:4
+page fault!   current time:1     last time:0
+working set: 1 4 
+===============
+step 2         Page no:5
+page fault!   current time:2     last time:1
+working set: 1 4 5 
+===============
+step 3         Page no:3
+page fault!   current time:3     last time:2
+working set: 1 3 4 5 
+===============
+step 4         Page no:3
+working set: 1 3 4 5 
+===============
+step 5         Page no:4
+working set: 1 3 4 5 
+===============
+step 6         Page no:2
+page fault!   current time:6     last time:3
+now replace
+working set: 2 3 4 
+===============
+step 7         Page no:3
+working set: 2 3 4 
+===============
+step 8         Page no:5
+page fault!   current time:8     last time:6
+working set: 2 3 4 5 
+===============
+step 9         Page no:3
+working set: 2 3 4 5 
+===============
+step 10         Page no:5
+working set: 2 3 4 5 
+===============
+step 11         Page no:1
+page fault!   current time:11     last time:8
+now replace
+working set: 1 3 5 
+===============
+step 12         Page no:4
+page fault!   current time:12     last time:11
+working set: 1 3 4 5 
+===============
+step 13         Page no:-1
+===============
+result:
+Hits = 5
+Misses = 8
+Hit rate = 0.384615
+
