@@ -1,45 +1,51 @@
 Window size = 4
 
-Access page: c
+Time 0 Access page: c
 Page Fault!
 Swap in page c
 Resident set = c
 
-Access page: c
+Time 1 Access page: c
 Resident set = c
 
-Access page: d
+Time 2 Access page: d
 Page Fault!
 Swap in page d
 Resident set = c d
 
-Access page: b
+Time 3 Access page: b
 Page Fault!
 Swap in page b
 Resident set = b c d
 
-Access page: c
+Time 4 Access page: c
 Resident set = b c d
 
-Access page: e
+Time 5 Access page: e
 Page Fault!
 Swap in page e
 Resident set = b c d e
 
-Access page: c
+Time 6 Access page: c
 Swap out page c
 Resident set = b c e
 
-Access page: e
+Time 7 Access page: e
 Swap out page e
 Resident set = c e
 
-Access page: a
+Time 8 Access page: a
 Page Fault!
 Swap in page a
 Resident set = a c e
 
-Access page: d
+Time 9 Access page: d
 Page Fault!
 Swap in page d
 Resident set = a c d e
+
+Time 10 Access page: #
+
+Hits = 4
+Misses = 6
+Hit rate = 0.4

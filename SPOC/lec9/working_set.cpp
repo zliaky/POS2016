@@ -10,7 +10,6 @@ int refer[PAGE_MAX];
 
 int main() {
 	char page;
-	int ptr = 0;
 	int t;
 
 	cout << "Window size = ";
@@ -19,10 +18,13 @@ int main() {
 		access_page[i] = -1;
 	}
 
+	int ptr = 0;
+	int step = 0;
+	int hit = 0;
 	while (1) {
 
 		// access a page
-		cout << endl << "Access page: ";
+		cout << endl << "Time " << step << " Access page: ";
 		page = 0;
 		while (page <= ' ') {
 			cin >> page;
@@ -34,11 +36,15 @@ int main() {
 			break;
 		}
 		page -= 'a';
+		step++;
 
 		// swap in
 		if (refer[page] <= 0) {
 			cout << "Page Fault!" << endl;
 			cout << "Swap in page " << (char) (page + 'a') << endl;
+		}
+		else {
+			hit++;
 		}
 		refer[page]++;
 
@@ -62,5 +68,6 @@ int main() {
 		}
 		cout << endl;
 	}
+	cout << endl << "Hits = " << hit << endl << "Misses = " << step - hit << endl << "Hit rate = " << (double) hit / step << endl;
 	return 0;
 }
