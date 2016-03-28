@@ -159,8 +159,7 @@ class scheduler:
             if self.proc_info[self.curr_proc][PROC_STATE] == STATE_RUNNING and \
                    len(self.proc_info[self.curr_proc][PROC_CODE]) > 0:
                 #YOUR CODE
-                instruction_to_execute = self.proc_info[self.curr_proc][PROC_CODE][0]
-                self.proc_info[self.curr_proc][PROC_CODE].remove(instruction_to_execute)
+                instruction_to_execute = self.proc_info[self.curr_proc][PROC_CODE].pop(0)
                 # del self.proc_info[self.curr_proc][PROC_CODE][0]
 
             # OUTPUT: print what everyone is up to
