@@ -59,21 +59,25 @@ class scheduler:
         if pid == -1:
             pid = self.curr_proc
 
-        self.proc_info[pid][PROC_STATE] = STATE_READY
+        if self.proc_info[pid][PROC_STATE] == expected:
+            self.proc_info[pid][PROC_STATE] = STATE_READY
+
         return
 
     #change to RUNNING STATE, the current proc's state should be expected
     def move_to_running(self, expected):
         #YOUR CODE
 
-        self.proc_info[self.curr_proc][PROC_STATE] = STATE_RUNNING
+        if self.proc_info[self.curr_proc][PROC_STATE] == expected:
+            self.proc_info[self.curr_proc][PROC_STATE] = STATE_RUNNING
         return
 
     #change to DONE STATE, the current proc's state should be expected
     def move_to_done(self, expected):
         #YOUR CODE
 
-        self.proc_info[self.curr_proc][PROC_STATE] = STATE_DONE
+        if self.proc_info[self.curr_proc][PROC_STATE] == expected:
+            self.proc_info[self.curr_proc][PROC_STATE] = STATE_DONE
         return
 
     #choose next proc using FIFO/FCFS scheduling, If pid==-1, then pid=self.curr_proc
@@ -87,7 +91,7 @@ class scheduler:
         count_pid = 0
         while count_pid < num_processes:
             if self.proc_info[next_pid][PROC_STATE] == STATE_READY:
-                self.curr_proc = next_pid;
+                self.curr_proc = next_pid
                 self.move_to_running(STATE_READY)
                 break
             next_pid = (next_pid + 1) % num_processes
@@ -181,8 +185,6 @@ class scheduler:
 
             # ENDCASE: check if currently running thing is out of instructions
             self.check_if_done()
-            if clock_tick > 20:
-                break
         return (clock_tick)
         
 #
