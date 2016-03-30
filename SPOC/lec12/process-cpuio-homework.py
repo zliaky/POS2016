@@ -252,7 +252,7 @@ class scheduler:
             # and add an io completion in the future
             elif instruction_to_execute == DO_IO:
                 #YOUR CODE
-                self.io_finish_times[self.curr_proc].append(clock_tick + 5)
+                self.io_finish_times[self.curr_proc].append(clock_tick + io_length)
                 self.move_to_wait(STATE_RUNNING)
                 self.next_proc()
 
