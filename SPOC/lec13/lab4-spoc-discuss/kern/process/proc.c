@@ -410,7 +410,7 @@ proc_init(void) {
 
     int pid1= kernel_thread(init_main, "init main1: Hello world!!", 0);
     int pid2= kernel_thread(init_main, "init main2: Hello world!!", 0);
-    int pid3= kernel_thread(init_main, "lalala", 0);
+    int pid3= kernel_thread(init_main, "init main_ours: HELLO WORLD!!", 0);
     if (pid1 <= 0 || pid2<=0 || pid3 <= 0) {
         panic("create kernel thread init_main1 or 2 or 3 failed.\n");
     }
