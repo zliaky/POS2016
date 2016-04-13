@@ -11,14 +11,36 @@ wakeup_proc(struct proc_struct *proc) {
 }
 
 void
+print_state(void) {
+	cprintf("state: ");
+//        cprintf("state: %d ", current->state);
+	switch (current->state) {
+		case PROC_UNINIT:
+			cprintf("PROC_UNINIT ");
+			break;
+		case PROC_SLEEPING:
+			cprintf("PROC_SLEEPING ");
+			break;
+		case PROC_RUNNABLE:
+			cprintf("PROC_RUNNABLE ");
+			break;
+		case PROC_ZOMBIE:
+			cprintf("PROC_ZOMBIE ");
+			break;
+		default:
+			cprintf("UNKNOWN ");
+	}
+}
+
+void
 schedule(void) {
+    print_state();
     bool intr_flag;
     list_entry_t *le, *last;
     struct proc_struct *next = NULL;
     local_intr_save(intr_flag);
     {
         current->need_resched = 0;
-        cprintf("state: %d ", current->state);
         last = (current == idleproc) ? &proc_list : &(current->list_link);
         le = last;
         do {
@@ -38,5 +60,6 @@ schedule(void) {
         }
     }
     local_intr_restore(intr_flag);
+    print_state();
 }
 
