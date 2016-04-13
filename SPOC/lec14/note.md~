@@ -85,4 +85,3 @@
 	- 数据段全部设置为只读，当需要写的时候，触发page fault，然后在中断处理中对此做相应处理
 	- VMA记录属于该进程的所有合法空间，若有VMA标志，则是为copy-on-write准备的，而不是本身就只读
 	- 引入虚存后disk+memory形成VM。引入VM之后copy-on-write会更加复杂
-	- 进程间有一块shared memory
