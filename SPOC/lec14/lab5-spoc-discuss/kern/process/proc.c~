@@ -816,7 +816,7 @@ user_main(void *arg) {
 
 static int
 user_main1(void *arg) {
-    KERNEL_EXECVE(hello);
+    KERNEL_EXECVE(my);
     cprintf("my_user_main exited.\n");
 }
 

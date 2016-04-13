@@ -290,7 +290,6 @@ trap(struct trapframe *tf) {
 
 	if (tf->tf_trapno != T_SYSCALL) {
 		cprintf("name = \"%s\", ring = %d\n", current->name, ring);
-		print_state();
 	}
         trap_dispatch(tf);
     
