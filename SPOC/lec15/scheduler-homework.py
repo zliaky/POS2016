@@ -13,7 +13,7 @@ parser.add_option("-l", "--jlist", default="", help="instead of random jobs, pro
 				  action="store", type="string", dest="jlist")
 parser.add_option("-m", "--maxlen", default=10, help="max length of job",
 				  action="store", type="int", dest="maxlen")
-parser.add_option("-p", "--policy", default="FIFO", help="sched policy to use: SJF, FIFO, RR",
+parser.add_option("-p", "--policy", default="FIFO", help="sched policy to use: SJF, FIFO, RR, STRIDE",
 				  action="store", type="string", dest="policy")
 parser.add_option("-q", "--quantum", help="length of time slice for RR policy", default=1, 
 				  action="store", type="int", dest="quantum")
@@ -37,12 +37,17 @@ print 'Here is the job list, with the run time of each job: '
 
 import operator
 
+maxstride = 10.0
+
 joblist = []
 if options.jlist == '':
 	for jobnum in range(0,options.jobs):
 		runtime = int(options.maxlen * random.random()) + 1
-		joblist.append([jobnum, runtime])
-		print '  Job', jobnum, '( length = ' + str(runtime) + ' )'
+		priority = int(10 * random.random()) + 1
+		stride = 0.0
+		step = maxstride / float(priority)
+		joblist.append([jobnum, runtime, priority, stride, step])
+		print '  Job', jobnum, '( length = ' + str(runtime) + ' , priority = ' + str(priority) + ' , stride = ' + str(stride) + ' , step = ' + str(step) + ')'
 else:
 	jobnum = 0
 	for runtime in options.jlist.split(','):
@@ -56,7 +61,7 @@ if options.solve == True:
 	print '** Solutions **\n'
 	if options.policy == 'SJF':
 		thetime = 0
-		joblist.sort(key=lamda x:x[1])
+		joblist.sort(key=lambda x:x[1])
 		print 'Execution trace:'
 		#YOUR CODE
 		 
@@ -81,8 +86,6 @@ if options.solve == True:
 			count = count + 1
 		print '\n  Average -- Response: %3.2f  Turnaround %3.2f  Wait %3.2f\n' % (responseSum/count, turnaroundSum/count, waitSum/count)
 
-		pass
-		
 	if options.policy == 'FIFO':
 		thetime = 0
 		print 'Execution trace:'
@@ -167,7 +170,76 @@ if options.solve == True:
 		
 		print '\n  Average -- Response: %3.2f  Turnaround %3.2f  Wait %3.2f\n' % (responseSum/count, turnaroundSum/count, waitSum/count)
 
-	if options.policy != 'FIFO' and options.policy != 'SJF' and options.policy != 'RR': 
+	if options.policy == 'STRIDE':
+		print 'Execution trace:'
+		turnaround = {}
+		response = {}
+		lastran = {}
+		wait = {}
+		quantum  = float(options.quantum)
+		jobcount = len(joblist)
+		for i in range(0,jobcount):
+			lastran[i] = 0.0
+			wait[i] = 0.0
+			turnaround[i] = 0.0
+			response[i] = -1
+
+		runlist = []
+		for e in joblist:
+			runlist.append(e)
+
+		thetime  = 0.0
+		while jobcount > 0:
+			# print '%d jobs remaining' % jobcount
+			next = 0
+			for i in range(0,jobcount):
+				if runlist[i][3] < runlist[next][3]:
+					next = i;
+
+			job = runlist.pop(next)
+			jobnum  = job[0]
+			runtime = float(job[1])
+			priority = job[2]
+			stride = float(job[3])
+			step = float(job[4])
+			if response[jobnum] == -1:
+				response[jobnum] = thetime
+			currwait = thetime - lastran[jobnum]
+			wait[jobnum] += currwait
+			# print ' quantum: %.2f' % (quantum)
+			if runtime > quantum:
+				ranfor = quantum
+				#YOUR CODE
+				runtime -= ranfor
+				stride += step
+
+				# print ' runtime: %.2f, quantum: %.2f' % (runtime, quantum)
+				print '  [ time %3d ] Run job %3d for %.2f secs, stride = %.2f -> %.2f' % (thetime, jobnum, ranfor, stride - step, stride)
+				runlist.append([jobnum, runtime, priority, stride, step])
+			else:
+				#YOUR CODE
+				ranfor = runtime
+				stride += step
+				print '  [ time %3d ] Run job %3d for %.2f secs ( DONE at %.2f ), stride = %.2f -> %.2f' % (thetime, jobnum, ranfor, thetime + ranfor, stride - step, stride)
+				turnaround[jobnum] = thetime + ranfor
+				jobcount -= 1
+			thetime += ranfor
+			lastran[jobnum] = thetime
+
+		print '\nFinal statistics:'
+		turnaroundSum = 0.0
+		waitSum       = 0.0
+		responseSum   = 0.0
+		for i in range(0,len(joblist)):
+			turnaroundSum += turnaround[i]
+			responseSum += response[i]
+			waitSum += wait[i]
+			print '  Job %3d -- Response: %3.2f  Turnaround %3.2f  Wait %3.2f' % (i, response[i], turnaround[i], wait[i])
+		count = len(joblist)
+		
+		print '\n  Average -- Response: %3.2f  Turnaround %3.2f  Wait %3.2f\n' % (responseSum/count, turnaroundSum/count, waitSum/count)
+
+	if options.policy != 'FIFO' and options.policy != 'SJF' and options.policy != 'RR' and options.policy != 'STRIDE':
 		print 'Error: Policy', options.policy, 'is not available.'
 		sys.exit(0)
 else:
