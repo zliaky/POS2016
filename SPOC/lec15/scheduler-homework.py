@@ -112,9 +112,9 @@ if options.solve == True:
 				response[jobnum] = thetime
 			currwait = thetime - lastran[jobnum]
 			wait[jobnum] += currwait
-			ranfor = quantum
 			# print ' quantum: %.2f' % (quantum)
 			if runtime > quantum:
+				ranfor = quantum
 				#YOUR CODE
 				runtime -= ranfor
 				# print ' runtime: %.2f, quantum: %.2f' % (runtime, quantum)
@@ -122,6 +122,7 @@ if options.solve == True:
 				runlist.append([jobnum, runtime])
 			else:
 				#YOUR CODE
+				ranfor = runtime
 				print '  [ time %3d ] Run job %3d for %.2f secs ( DONE at %.2f )' % (thetime, jobnum, ranfor, thetime + ranfor)
 				turnaround[jobnum] = thetime + ranfor
 				jobcount -= 1
