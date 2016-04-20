@@ -233,6 +233,7 @@ trap_dispatch(struct trapframe *tf) {
          */
         ticks ++;
         assert(current != NULL);
+if (ticks % 100 == 0) cprintf("100 TICKS\n");
 	sched_class_proc_tick(current);
         break;
     case IRQ_OFFSET + IRQ_COM1:

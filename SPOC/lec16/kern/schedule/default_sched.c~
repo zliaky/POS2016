@@ -153,7 +153,7 @@ stride_proc_tick(struct run_queue *rq, struct proc_struct *proc) {
           proc->time_slice --;
      }
      if (proc->time_slice == 0) {
-          cprintf("++++++ CURRENT = %d, TIME SLICE = 0, NEED RESCHED = 1 ++++++\n", current->pid);
+          cprintf("++++++ TIME SLICE = 0, NEED RESCHED = 1 ++++++\n");
           proc->need_resched = 1;
      }
 }

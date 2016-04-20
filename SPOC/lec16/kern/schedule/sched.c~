@@ -36,7 +36,7 @@ sched_class_proc_tick(struct proc_struct *proc) {
         sched_class->proc_tick(rq, proc);
     }
     else {
-        cprintf("++++++ IDLEPROC NEED_RESCHED = 1 ++++++\n");
+        cprintf("++++++ IN PROC_TICK, need_resched = 1 ++++++\n");
         proc->need_resched = 1;
     }
 }
