@@ -13,6 +13,7 @@ pick proc4, stride = 2147483645 -> 4294967292
 
 以下为完整输出结果。
 
+```
 ++ setup timer interrupts
 ++++++ IDLEPROC NEED_RESCHED = 1 ++++++
 
@@ -223,4 +224,4 @@ exit pass.
 ++++++ DEQUEUE PID = 1 ++++++
 all user-mode processes have quit.
 init check memory pass.
-
+```
