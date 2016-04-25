@@ -1,4 +1,6 @@
-如果没有 while choosing[j] 这一条语句的话，我们考虑两个进程 P0, P1，P0 的 pid 值比 P1 小，
+如果没有 while choosing[j] 这一条语句的话，我们考虑两个进程 P0 和 P1，其中 P0 的 pid 值比 P1 小，
+
+初始时 num[0] = num[1] = 0。
 
 P0 在计算完 max = 0 后，切换到进程 P1 执行，进程 P1 计算出 max = 0 并得到 num[1] = 1，在 while 循环中，由于 num[0] = 0，所以 P1 顺利进入临界区执行。
 
