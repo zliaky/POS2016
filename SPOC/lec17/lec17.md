@@ -68,6 +68,9 @@ P0 在计算完 max = 0 后，切换到进程 P1 执行，进程 P1 计算出 ma
 
 多次执行`./x86.py -p test-and-test-and-set.s -t 2 -i 1 -M count -c` 和 `./x86.py -p test-and-test-and-set.s -t 2 -i 10 -r -M count -c`，均得到 count = 2，说明 test-and-test-and-set.s 可能实现了锁机制。
 
+
+Compare-And-Swap 实现在 compare-and-swap.s中，执行`./x86.py -p compare-and-swap.s -t 1 -i 10 -r -M 2000 -R ax -c`可以看到运行结果。
+
 ```
 Compare-And-Swap
 
