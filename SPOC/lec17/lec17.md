@@ -35,19 +35,19 @@ P0 在计算完 max = 0 后，切换到进程 P1 执行，进程 P1 计算出 ma
 
  - 变量x的内存地址为2000, `./x86.py -p looping-race-nolock.s -t 2 -a bx=3 -M 2000`, 请问变量x的值是什么？为何每个线程要循环3次？
 
- 6
+ 6，因为每个线程的 bx 都被赋值为 3
 
  - 变量x的内存地址为2000, `./x86.py -p looping-race-nolock.s -t 2 -M 2000 -i 4 -r -s 0`， 请问变量x的值是什么？
 
- 2
+ 1 或 2
 
  - 变量x的内存地址为2000, `./x86.py -p looping-race-nolock.s -t 2 -M 2000 -i 4 -r -s 1`， 请问变量x的值是什么？
 
- 2
+ 1 或 2
 
  - 变量x的内存地址为2000, `./x86.py -p looping-race-nolock.s -t 2 -M 2000 -i 4 -r -s 2`， 请问变量x的值是什么？
 
- 2
+ 1 或 2
 
  - 变量x的内存地址为2000, `./x86.py -p looping-race-nolock.s -a bx=1 -t 2 -M 2000 -i 1`， 请问变量x的值是什么？ 
 
@@ -57,6 +57,17 @@ P0 在计算完 max = 0 后，切换到进程 P1 执行，进程 P1 计算出 ma
 3. （spoc） 了解software-based lock, hardware-based lock, [software-hardware-lock代码目录](https://github.com/chyyuu/ucore_lab/tree/master/related_info/lab7/software-hardware-locks)
 
   - 理解flag.s,peterson.s,test-and-set.s,ticket.s,test-and-test-and-set.s 请通过x86.py分析这些代码是否实现了锁机制？请给出你的实验过程和结论说明。能否设计新的硬件原子操作指令Compare-And-Swap,Fetch-And-Add？
+
+执行`./x86.py -p flag.s -t 2 -i 1 -M count -c`，count = 1，说明 flag.s 没有实现锁机制。
+
+执行`./x86.py -p peterson.s -t 2 -i 1 -M count -c`，count = 1，说明 peterson.s 没有实现锁机制。
+
+多次执行`./x86.py -p test-and-set.s -t 2 -i 1 -M count -c` 和 `./x86.py -p test-and-set.s flag.s -t 2 -i 10 -r -M count -c`，均得到 count = 2，说明 test-and-set.s 可能实现了锁机制。
+
+多次执行`./x86.py -p ticket.s -t 2 -i 1 -M count -c` 和 `./x86.py -p ticket.s -t 2 -i 10 -r -M count -c`，均得到 count = 2，说明 ticket.s 可能实现了锁机制。
+
+多次执行`./x86.py -p test-and-test-and-set.s -t 2 -i 1 -M count -c` 和 `./x86.py -p test-and-test-and-set.s -t 2 -i 10 -r -M count -c`
+
 ```
 Compare-And-Swap
 
