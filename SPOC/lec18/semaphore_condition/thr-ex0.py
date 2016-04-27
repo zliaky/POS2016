@@ -1,7 +1,7 @@
 #coding=utf-8
-import threading  
-  
-def thread_fun(num):  
+import threading
+
+def thread_fun(num):
     for n in range(0, int(num)):  
         print " I come from %s, num: %s" %( threading.currentThread().getName(), n)  
   
