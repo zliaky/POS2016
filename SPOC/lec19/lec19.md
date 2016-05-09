@@ -42,10 +42,10 @@ cond_signal (condvar_t *cvp) {
 }
 ```
 
-    对 cvp->owner->next_count 的操作同样是先加后减，所以 cvp->owner->next_count 不可能小于零。
+	对 cvp->owner->next_count 的操作同样是先加后减，所以 cvp->owner->next_count 不可能小于零。
 
-    发出 cond_signal 的进程或线程必然会持有锁 mtp->mutex，因此不可能有第二个进程或线程调用 cond_signal，所以 cvp->owner->next_count 不可能大于一。
+	发出 cond_signal 的进程或线程必然会持有锁 mtp->mutex，因此不可能有第二个进程或线程调用 cond_signal，所以 cvp->owner->next_count 不可能大于一。
 
   -  目前的lab7-answer中管程的实现是Hansen管程类型还是Hoare管程类型？请在lab7-answer中实现另外一种类型的管程。
 
-  	lab7-answer 实现的是 Hoare 管程类型。
+	lab7-answer 实现的是 Hoare 管程类型。
