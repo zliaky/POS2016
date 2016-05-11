@@ -63,7 +63,9 @@ class Bankers(object):
         #if every element of Requests can't accepted after previous process done, this mean it is not safe state
         # YOUR CODE, 2013011342
         for i in range(len(self.need)):
+            finish = True
             if self.finished[i] == False:
+                finish = False
                 flag = True
                 for j in range(len(self.need[i])):
                     if self.need[i][j] > self.avaliable[j]:
@@ -72,7 +74,7 @@ class Bankers(object):
                 if flag == True:
                     return True
         #check END here
-        return False
+        return finish
 
     def print_matrixes(self):
         print "_____________________________________________"
