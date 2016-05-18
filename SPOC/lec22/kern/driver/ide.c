@@ -156,6 +156,7 @@ ide_device_size(unsigned short ideno) {
 
 int
 ide_read_secs(unsigned short ideno, uint32_t secno, void *dst, size_t nsecs) {
+	print_stackframe();
     assert(nsecs <= MAX_NSECS && VALID_IDE(ideno));
     assert(secno < MAX_DISK_NSECS && secno + nsecs <= MAX_DISK_NSECS);
     unsigned short iobase = IO_BASE(ideno), ioctrl = IO_CTRL(ideno);
