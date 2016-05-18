@@ -1,3 +1,6 @@
+在sfs_rwblock()中输出了堆栈信息，部分结果如下。
+
+```
 ebp:0xc0369998 eip:0xc0100bd2 args:0x00000170 0x00000001 0xc03699e8 0xc0109d19 
     kern/debug/kdebug.c:350: print_stackframe+21
 ebp:0xc03699f8 eip:0xc0101cb4 args:0x00000002 0x000002e0 0xc0360000 0x00000008 
@@ -38,3 +41,12 @@ ebp:0xc0369fbc eip:0xc0102b1b args:0xc01183d0 0xc0369fdc 0xc01183d0 0x00000000
     kern/trap/trapentry.S:24: <unknown>+0
 ebp:0xc0369fec eip:0xc010dcbb args:0x00000000 0x00000000 0x00000010 0xc0356458 
     kern/process/proc.c:995: user_main+70
+```
+
+可以看出函数调用的顺序是这样的。
+
+```
+sysfile_read()->file_read()->sfs_read()->sfs_io()->
+sfs_io_nolock()->sfs_rbuf()->sfs_rwblock()_nolock()->
+ide_read_secs()
+```
