@@ -1,98 +1,67 @@
-# 磁盘访问 练习
+## 小组思考题
+ 1. (spoc)请以键盘输入、到标准输出设备stdout的printf输出、串口输出、磁盘文件复制为例，描述ucore操作系统I/O从请求到完成的整个执行过程，并分析I/O过程的时间开销。
 
-## 问题 1：请执行 FIFO磁盘调度策略
+(1) 键盘输入
 
-```
-./disksim.py  采用FIFO -a 0
-./disksim.py   -a 6
-./disksim.py   -a 30
-./disksim.py   -a 7,30,8
-./disksim.py   -a 10,11,12,13,24,1
-```
-请回答每个磁盘请求序列的IO访问时间
+键盘输入触发 KBD 中断，在 trap_dispatch() 中对键盘中断的处理流程如下。
 
 ```
-./disksim.py -a 0
-
-REQUESTS ['0']
-
-Block:   0  Seek:  0  Rotate:165  Transfer: 30  Total: 195
-
-TOTALS      Seek:  0  Rotate:165  Transfer: 30  Total: 195
-```
-```
-./disksim.py -a 6
-
-REQUESTS ['6']
-
-Block:   6  Seek:  0  Rotate:345  Transfer: 30  Total: 375
-
-TOTALS      Seek:  0  Rotate:345  Transfer: 30  Total: 375
-```
-```
-./disksim.py -a 30
-
-REQUESTS ['30']
-
-Block:  30  Seek: 80  Rotate:265  Transfer: 30  Total: 375
-
-TOTALS      Seek: 80  Rotate:265  Transfer: 30  Total: 375
-```
-```
-./disksim.py -a 7,30,8
-
-REQUESTS ['7', '30', '8']
-
-Block:   7  Seek:  0  Rotate: 15  Transfer: 30  Total:  45
-Block:  30  Seek: 80  Rotate:220  Transfer: 30  Total: 330
-Block:   8  Seek: 80  Rotate:310  Transfer: 30  Total: 420
-
-TOTALS      Seek:160  Rotate:545  Transfer: 90  Total: 795
-```
-```
-./disksim.py -a 10,11,12,13,24,1
-
-REQUESTS ['10', '11', '12', '13', '24', '1']
-
-Block:  10  Seek:  0  Rotate:105  Transfer: 30  Total: 135
-Block:  11  Seek:  0  Rotate:  0  Transfer: 30  Total:  30
-Block:  12  Seek: 40  Rotate:320  Transfer: 30  Total: 390
-Block:  13  Seek:  0  Rotate:  0  Transfer: 30  Total:  30
-Block:  24  Seek: 40  Rotate:260  Transfer: 30  Total: 330
-Block:   1  Seek: 80  Rotate:280  Transfer: 30  Total: 390
-
-TOTALS      Seek:160  Rotate:965  Transfer:180  Total:1305
+    case IRQ_OFFSET + IRQ_KBD:
+        c = cons_getc();
+        //cprintf("kbd [%03d] %c\n", c, c);
+        {
+          extern void dev_stdin_write(char c);
+          dev_stdin_write(c);
+        }
+        break;
 ```
 
-## 问题 2：请执行 SSTF磁盘调度策略
+通过 cons_getc() 从控制台获取输入的字符，cons_getc() 在屏蔽中断之后，从输入缓存中返回第一个字符，作为当前输入字符。
 
 ```
-./disksim.py   -a 10,11,12,13,24,1
+int
+cons_getc(void) {
+    int c = 0;
+    bool intr_flag;
+    local_intr_save(intr_flag);
+    {
+        // poll for any pending input characters,
+        // so that this function works even when interrupts are disabled
+        // (e.g., when called from the kernel monitor).
+        serial_intr();
+        kbd_intr();
+
+        // grab the next character from the input buffer.
+        if (cons.rpos != cons.wpos) {
+            c = cons.buf[cons.rpos ++];
+            if (cons.rpos == CONSBUFSIZE) {
+                cons.rpos = 0;
+            }
+        }
+    }
+    local_intr_restore(intr_flag);
+    return c;
+}
+```
+
+通过 dev_stdin_write(c) 函数将字符 c 输出到屏幕，dev_stdin_write(c) 在屏蔽中断之后，将当前字符加入输出缓存，如果有其它进程在等待键盘输入的话，唤醒等待队列，键盘输入请求完成。
 
 ```
-请回答每个磁盘请求序列的IO访问时间
-
-```
-./disksim.py -p SSTF -a 10,11,12,13,24,1
-
-REQUESTS ['10', '11', '12', '13', '24', '1']
-
-Block:  10  Seek:  0  Rotate:105  Transfer: 30  Total: 135
-Block:  11  Seek:  0  Rotate:  0  Transfer: 30  Total:  30
-Block:   1  Seek:  0  Rotate: 30  Transfer: 30  Total:  60
-Block:  12  Seek: 40  Rotate:260  Transfer: 30  Total: 330
-Block:  13  Seek:  0  Rotate:  0  Transfer: 30  Total:  30
-Block:  24  Seek: 40  Rotate:260  Transfer: 30  Total: 330
-
-TOTALS      Seek: 80  Rotate:655  Transfer:180  Total: 915
-```
-
-## 问题 3：请执行 SCAN, C-SCAN磁盘调度策略
-
-```
-./disksim.py   -a 10,11,12,13,24,1
-```
-请回答每个磁盘请求序列的IO访问时间
-
-```
+void
+dev_stdin_write(char c) {
+    bool intr_flag;
+    if (c != '\0') {
+        local_intr_save(intr_flag);
+        {
+            stdin_buffer[p_wpos % STDIN_BUFSIZE] = c;
+            if (p_wpos - p_rpos < STDIN_BUFSIZE) {
+                p_wpos ++;
+            }
+            if (!wait_queue_empty(wait_queue)) {
+                wakeup_queue(wait_queue, WT_KBD, 1);
+            }
+        }
+        local_intr_restore(intr_flag);
+    }
+}
 ```
